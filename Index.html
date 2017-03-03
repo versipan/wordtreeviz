@@ -1,0 +1,148 @@
+<html>
+  <head>
+      <style type ="text/css">
+             #search {
+                 width: 200px;
+                 padding: 7px;
+                 margin: 10px;
+                 border: 1px solid #607d8b;
+             }
+             #submit {
+                 padding: 7px;
+                 background: #607d8b;
+                 border: 1px solid #607d8b;
+                 color: white;
+                 margin: -5px;
+             }
+             .error {
+                 color: red;
+                 display: block;
+                 margin-left: 10px;
+             }
+      </style>
+
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      <script type="text/javascript">
+          
+            // Explicit tree code.
+            var obama_tree = [];
+            var demdebate_tree = [];
+          
+            var explicit_trees = {
+                'Obama': obama_tree,
+                '#DemDebate': demdebate_tree
+            };
+            //-eo Explicit tree code.
+          
+            // Implicit tree code.
+            var raw_data = [ 
+                ['If the #DemDebate were taking place 60yrs ago, you would think @HillaryClinton was the Republican, debating @BernieSanders, the #progressive'],
+                ['she does not have a choice - she worked for obama 1st term. easy to overthink https://t.co/HXg16DYWmR'],
+                ['That last statement is the most passionate I have seen Clinton in this election. #DemDebate'],
+                ['Hillary might be using the facilities during this break. Imagine how disgusted Trump must be right now. #DemDebate'],
+                ['Such a nasty woman? No, sir. She is the strongest woman on the planet and she is our next President. #ImWithHer  #debatenight #debate'],
+                ['Strongest, hardest working woman in the country, laughing as she saves us from apocalypse #debate #ImWithHer'],
+                ['Hillary is Winning the $ Race with Jeb : Raised $163.5 Million #NV #SC #DemDebate #Bernie'],
+                ['LOOK #SouthCarolinaPrimary #DemDebate #Democrat #HillaryEmail #WhateverItTakes #ImWithHer #GunRights'],
+                ['If the #DemDebate were taking place 60yrs ago, you would think Hillary Clinton was the Republican, debating @BernieSanders, the #progressive.'],
+                ['#DemDebate Hillary and Bernie support Trump!  THey can sum up their support for him in one word, CHINA'],
+            ];
+          
+            var init_options = {
+                    wordtree: {
+                        format: 'implicit',
+                        type: 'suffix',
+                        word: '',
+                    }
+                };
+          
+            var init_data = null;
+            //-eo Implicit tree code.
+          
+            google.charts.load('current', {packages:['wordtree']});  
+          
+            var onloadCallback = function () {
+                
+                // Implicit tree code.
+                init_data = google.visualization.arrayToDataTable(raw_data);
+                drawChart(init_data, init_options);
+                //-eo Implicit tree code.
+                
+                // Explicit tree code.
+                //drawExplicitChart();
+                //-eo Explicit tree code.
+            };
+          
+            google.charts.setOnLoadCallback(onloadCallback);
+          
+            //-eo Implicit tree code.
+            function drawChart(data, options, root_word) {
+                root_word = root_word || '#DemDebate';
+                options['wordtree']['word'] = root_word;
+                new google.visualization.WordTree(document.getElementById('wordtree_double'))
+                                        .draw(data, options);
+            }
+            //-eo Implicit tree code.
+          
+            // Explicit tree code.
+            function drawExplicitChart(root_word) {
+                root_word = root_word || 'Obama';
+                var chosen_tree = explicit_trees[root_word];
+                var chosen_tree_table = google.visualization.arrayToDataTable(chosen_tree);
+                options['wordtree']['word'] = root_word;
+                new google.visualization.WordTree(document.getElementById('wordtree_double'))
+                                        .draw(chosen_tree_table, {
+                                                                    wordtree: {
+                                                                        format: 'explicit',
+                                                                        type: 'suffix',
+                                                                        word: root_word,
+                                                                    }
+                                                                });
+            }
+            //-eo Explicit tree code.
+        </script>
+  </head>
+  <body>
+      <form>
+          <input type="text" placeholder="Search..."
+                 maxlength="20" id="search">
+          <input type="button" value="Go!" id="submit">
+          <span class='error' id="error_message"></span>
+      </form>
+      <div id="wordtree_double" style="width: 1900px; height: 1000px;"></div>
+    
+      <script type="text/javascript">
+          var error_message = document.getElementById('error_message');
+          
+          document.getElementById('submit').addEventListener('click', function (e) {
+              
+              // Parsing text input.
+              var search_text = document.getElementById('search').value.trim();
+              var check = new RegExp('(?:^|\\s)' + search_text + '(?:$|\\s)', 'i');
+              var found = false;
+              for (var i = 0; i < raw_data.length; i++) {
+                  var sentence = raw_data[i][0];
+                  if (sentence.match(check) !== null) {
+                      found = true;
+                      break;
+                  }   
+              }
+              if (found === false) {
+                  error_message.textContent = "Word \"" + search_text + "\" is not found in the tree.";
+                  return;
+              } else {
+                  error_message.textContent = '';
+              }
+              //-eo Parsing text input.
+              
+              // Implicit tree code.
+              drawChart(init_data, init_options, search_text);
+              //-eo Implicit tree code.
+              
+              // Explicit tree code.
+              //drawExplicitChart(search_text);
+              //-eo Explicit tree code.
+          });
+      </script>
+  </body>
+</html>
